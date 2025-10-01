@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defence Secure Communication Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Security Classification Banner -->
+    <div id="classification-banner" class="classification-banner hidden">
+        <span id="classification-text">RESTRICTED</span>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="flag-emblem">🇮🇳</div>
+                <h1>Defence Secure Communications</h1>
+                <p>Ministry of Defence - Government of India</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label class="form-label">Defence ID</label>
+                    <input type="text" id="defence-id" class="form-control" placeholder="DEF001, VET001, FAM001, HQ001" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" required>
+                </div>
+                
+                <button id="login-btn" class="btn btn--primary btn--full-width">Secure Login</button>
+            </div>
+            
+            <div class="login-footer">
+                <p>🔒 End-to-End Encrypted | AES-256</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MFA Screen -->
+    <div id="mfa-screen" class="screen">
+        <div class="mfa-container">
+            <div class="mfa-header">
+                <h2>Multi-Factor Authentication</h2>
+                <p>Additional security verification required</p>
+            </div>
+            
+            <div class="mfa-options">
+                <div class="mfa-option" id="biometric-auth">
+                    <div class="mfa-icon">👆</div>
+                    <h3>Biometric Verification</h3>
+                    <p>Touch sensor to authenticate</p>
+                    <button class="btn btn--primary">Authenticate</button>
+                </div>
+            </div>
+            
+            <div class="mfa-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="mfa-progress"></div>
+                </div>
+                <p id="mfa-status">Waiting for biometric input...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- VPN Connection Screen -->
+    <div id="vpn-screen" class="screen">
+        <div class="vpn-container">
+            <div class="vpn-header">
+                <h2>Secure VPN Connection</h2>
+                <p>Establishing encrypted tunnel</p>
+            </div>
+            
+            <div class="vpn-status">
+                <div class="vpn-indicator" id="vpn-indicator">
+                    <div class="vpn-pulse"></div>
+                </div>
+                <p id="vpn-status-text">Connecting to secure network...</p>
+            </div>
+            
+            <div class="vpn-servers">
+                <h3>Available Secure Nodes</h3>
+                <div class="server-list" id="server-list"></div>
+            </div>
+            
+            <div class="vpn-metrics">
+                <div class="metric">
+                    <span class="metric-label">Encryption:</span>
+                    <span class="metric-value">AES-256</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Protocol:</span>
+                    <span class="metric-value">WireGuard</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Status:</span>
+                    <span class="metric-value" id="connection-status">Connecting...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="screen">
+        <!-- Navigation Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="flag-small">🇮🇳</div>
+                <h1>DefComm</h1>
+            </div>
+            
+            <div class="header-center">
+                <div class="security-status" id="security-status">
+                    <div class="status-indicator secure"></div>
+                    <span>SECURE</span>
+                </div>
+                <div class="vpn-status-header">
+                    <div class="vpn-icon">🛡️</div>
+                    <span id="vpn-location">Delhi</span>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <button class="btn btn--outline btn--sm" id="settings-btn">Settings</button>
+                <button class="btn btn--outline btn--sm" id="logout-btn">Logout</button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="user-profile">
+                    <div class="profile-photo" id="user-photo">👨‍✈️</div>
+                    <div class="profile-info">
+                        <h3 id="user-name">Major Rajesh Kumar</h3>
+                        <p id="user-rank">Major</p>
+                        <p id="user-unit">Indian Army - Northern Command</p>
+                        <div class="clearance-badge" id="user-clearance">SECRET</div>
+                    </div>
+                </div>
+                
+                <nav class="sidebar-nav">
+                    <button class="nav-btn active" data-view="dashboard">
+                        <span class="nav-icon">📊</span>
+                        Dashboard
+                    </button>
+                    <button class="nav-btn" data-view="messages">
+                        <span class="nav-icon">💬</span>
+                        Secure Messages
+                    </button>
+                    <button class="nav-btn" data-view="groups">
+                        <span class="nav-icon">👥</span>
+                        Groups
+                    </button>
+                    <button class="nav-btn" data-view="files">
+                        <span class="nav-icon">📁</span>
+                        Secure Files
+                    </button>
+                    <button class="nav-btn" data-view="admin" id="admin-nav" style="display: none;">
+                        <span class="nav-icon">⚙️</span>
+                        HQ Admin
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Dashboard View -->
+            <div id="dashboard-view" class="content-view active">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Security Status</h3>
+                        <div class="status-grid">
+                            <div class="status-item">
+                                <div class="status-dot secure"></div>
+                                <span>VPN Connection</span>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-dot secure"></div>
+                                <span>Message Encryption</span>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-dot secure"></div>
+                                <span>File Security</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Active Groups</h3>
+                        <div class="group-stats">
+                            <div class="stat">
+                                <span class="stat-number" id="group-count">3</span>
+                                <span class="stat-label">Groups</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="member-count">5</span>
+                                <span class="stat-label">Members</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-feed" id="activity-feed"></div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Security Alerts</h3>
+                        <div class="alert-list" id="alert-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages View -->
+            <div id="messages-view" class="content-view">
+                <div class="messages-layout">
+                    <div class="groups-panel">
+                        <h3>Secure Groups</h3>
+                        <div class="group-list" id="group-list"></div>
+                    </div>
+                    
+                    <div class="chat-panel">
+                        <div class="chat-header" id="chat-header">
+                            <h3>Select a group to start messaging</h3>
+                        </div>
+                        
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="no-chat-selected">
+                                <div class="no-chat-icon">💬</div>
+                                <p>Select a group to view secure messages</p>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input" id="chat-input" style="display: none;">
+                            <div class="input-row">
+                                <input type="text" id="message-input" class="form-control" placeholder="Type secure message..." disabled>
+                                <button id="attach-btn" class="btn btn--outline">📎</button>
+                                <button id="voice-btn" class="btn btn--outline">🎤</button>
+                                <button id="send-btn" class="btn btn--primary">🔒 Send</button>
+                            </div>
+                            <div class="input-footer">
+                                <span class="encryption-info">🔐 AES-256 End-to-End Encryption Active</span>
+                                <span class="char-counter" id="char-counter">0/500</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Groups View -->
+            <div id="groups-view" class="content-view">
+                <div class="groups-header">
+                    <h2>Group Management</h2>
+                    <button class="btn btn--primary" id="create-group-btn" style="display: none;">Create Group</button>
+                </div>
+                <div class="groups-grid" id="groups-grid"></div>
+            </div>
+
+            <!-- Files View -->
+            <div id="files-view" class="content-view">
+                <div class="files-header">
+                    <h2>Secure File Sharing</h2>
+                    <button class="btn btn--primary" id="upload-btn">📤 Upload File</button>
+                </div>
+                <div class="files-grid" id="files-grid">
+                    <div class="file-item">
+                        <div class="file-icon">📄</div>
+                        <div class="file-info">
+                            <h4>Mission_Brief_Classified.pdf</h4>
+                            <p>Uploaded by HQ001 • 2 hours ago</p>
+                            <div class="file-security">
+                                <span class="security-badge">CONFIDENTIAL</span>
+                                <span class="watermark-info">🔐 Watermarked</span>
+                            </div>
+                        </div>
+                        <button class="btn btn--outline btn--sm">Download</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin View -->
+            <div id="admin-view" class="content-view">
+                <div class="admin-header">
+                    <h2>HQ Administration Panel</h2>
+                </div>
+                <div class="admin-tabs">
+                    <button class="tab-btn active" data-tab="users">User Management</button>
+                    <button class="tab-btn" data-tab="groups">Group Approval</button>
+                    <button class="tab-btn" data-tab="security">Security Audit</button>
+                    <button class="tab-btn" data-tab="monitoring">Communication Monitoring</button>
+                </div>
+                
+                <div class="admin-content">
+                    <div id="admin-users" class="tab-content active">
+                        <div class="user-management" id="user-management"></div>
+                    </div>
+                    <div id="admin-groups" class="tab-content">
+                        <div class="group-approval" id="group-approval"></div>
+                    </div>
+                    <div id="admin-security" class="tab-content">
+                        <div class="security-audit" id="security-audit"></div>
+                    </div>
+                    <div id="admin-monitoring" class="tab-content">
+                        <div class="communication-monitoring" id="communication-monitoring"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Security Settings</h2>
+                <button class="modal-close" id="settings-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <h4>Security Preferences</h4>
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked> Screenshot Protection
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked> Copy-Paste Restriction
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked> Auto-logout (30 min)
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <h4>Notification Settings</h4>
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked> Message Notifications
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" checked> Security Alerts
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox"> Sound Notifications
+                        </label>
+                    </div>
+                </div>
+                <div class="audit-log">
+                    <h4>Security Audit Log</h4>
+                    <div class="log-entries" id="log-entries"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Warnings Modal -->
+    <div id="security-warning-modal" class="modal hidden">
+        <div class="modal-content warning">
+            <div class="modal-header">
+                <h2>⚠️ Security Alert</h2>
+            </div>
+            <div class="modal-body">
+                <p id="warning-message">Security action blocked for protection</p>
+                <button class="btn btn--primary" id="warning-ok">Understood</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Upload Modal -->
+    <div id="upload-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Secure File Upload</h2>
+                <button class="modal-close" id="upload-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area">
+                    <div class="upload-icon">📤</div>
+                    <p>Drop files here or click to browse</p>
+                    <input type="file" id="file-input" accept=".pdf,.doc,.docx,.jpg,.png">
+                    <div class="upload-security">
+                        <p>🔒 Files will be encrypted and watermarked</p>
+                        <p>⚠️ Allowed formats: PDF, DOC, DOCX, JPG, PNG</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
